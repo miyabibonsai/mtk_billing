@@ -60,8 +60,10 @@ class GenerateBilling extends Command
                     ->limit(config('billings.records_per_generate'))
                     ->get();
 
+        $this->info(count($records));
 
         $waiting_ids = [];
+        $i = 0;
         foreach($records as $sim) {
             $waiting_ids[] = $sim->waiting_id;
             $model_instance = new $model();
@@ -72,16 +74,18 @@ class GenerateBilling extends Command
                 'previous_plan' => $sim->waiting_previous_plan ?? $sim->previous_plan ?? null,
                 'previous_callplan' => $sim->waiting_previous_callplan ?? $sim->previous_callplan ?? null,
             ];
-            // Array to model instance
+            $i++;
+
             $model_instance->forceFill((array)$sim + $arr);
 
-            // Checking Output
+            // // Checking Output
             $this->info("Simcard ID for $model_instance->id");
             $this->info("Plan ID for {$model_instance->$plan_column}");
 
             $date = new Carbon($model_instance->waiting_date);
             $model_instance->$method($date);
         }
+        $this->info($i);
         WaitingBillingGenerateSim::whereIn('id', $waiting_ids)->update(['status' => 'done']);
     }
 }
