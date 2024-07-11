@@ -34,6 +34,6 @@ class RakutenDataSimBilling extends BillingAbstract
     public function calculateBillingAmount($sim): float
     {
         $plan = RakutenPlan::where('month', 1)->where('gb', $sim->plan)->where('type', 'extension')->first();
-        return System::getPlanPrice(RakutenPlan::class, $plan->id, $sim->merchant_id);
+        return $plan->price ?? 0;
     }
 }
