@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\mobile\DataSim;
 use App\Models\mobile\WaitingBillingGenerateSim;
 use Exception;
 use App\Traits\Billable;
@@ -61,11 +62,8 @@ class GenerateBilling extends Command
                     ->get();
 
         $this->info(count($records));
-
-        $waiting_ids = [];
         $i = 0;
         foreach($records as $sim) {
-            $waiting_ids[] = $sim->waiting_id;
             $model_instance = new $model();
             // Array merge
             $arr = [
@@ -84,8 +82,9 @@ class GenerateBilling extends Command
 
             $date = new Carbon($model_instance->waiting_date);
             $model_instance->$method($date);
+            WaitingBillingGenerateSim::where('id', $sim->waiting_id)->update(['status' => 'done']);
         }
         $this->info($i);
-        WaitingBillingGenerateSim::whereIn('id', $waiting_ids)->update(['status' => 'done']);
+
     }
 }
