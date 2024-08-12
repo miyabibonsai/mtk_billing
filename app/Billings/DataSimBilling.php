@@ -30,6 +30,6 @@ class DataSimBilling extends BillingAbstract
 
     public function calculateBillingAmount($sim): float
     {
-        return is_string($sim->price) || is_null($sim->price) ? 0 : $sim->price;
+        return (int) ($sim->price);
     }
 }
