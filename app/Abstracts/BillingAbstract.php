@@ -48,6 +48,7 @@ abstract class BillingAbstract implements BillingInterface
         }
         $billing->simcard_type = $this->model;
         $billing->amount = $amount;
+        $billing->total = $amount;
         $billing->date = $date->format('Y-m-d');
         $billing->billing_group_id = $group_id;
 
@@ -104,6 +105,7 @@ abstract class BillingAbstract implements BillingInterface
     public function updateBillingGroupAmount(BillingGroup $billing_group){
         $amount = $billing_group->billings()->sum('amount');
         $billing_group->amount = $amount;
+        $billing_group->total = $amount;
         $billing_group->save();
     }
 

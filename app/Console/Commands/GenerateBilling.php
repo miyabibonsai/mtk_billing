@@ -55,6 +55,7 @@ class GenerateBilling extends Command
         $records = DB::table($sim_table)
                     ->join($waiting_table, "$waiting_table.sim_id", '=', "$sim_table.id")
                     ->where("$waiting_table.status", 'waiting')
+                    ->where("$waiting_table.id" , 109142)
                     ->where("$waiting_table.simcard_type", $model)
                     ->select("$sim_table.*", "$waiting_table.id as waiting_id","$waiting_table.rewrite as rewrite", "$waiting_table.plan as waiting_plan", "$waiting_table.plan as waiting_callplan", "$waiting_table.previous_callplan as waiting_previous_callplan", "$waiting_table.date as waiting_date" )
                     ->orderBy("$waiting_table.id", 'desc')

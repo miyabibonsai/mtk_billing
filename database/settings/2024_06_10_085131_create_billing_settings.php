@@ -8,6 +8,7 @@ return new class extends SettingsMigration
     {
         $this->migrator->add('billing.bill_unit', 30);
         $this->migrator->add('billing.sms_unit', 5);
+        $this->migrator->add('billing.call_unit', 22);
         $this->migrator->add('billing.foreign_sms_unit', 100);
         $this->migrator->add('billing.foreign_call_unit', 300);
     }
