@@ -30,6 +30,6 @@ class DataSimBilling extends BillingAbstract
 
     public function calculateBillingAmount($sim): float
     {
-        return (int) ($sim->price);
+        return (int) DataSimPlan::find($sim->plan_id)->price ?? 0;
     }
 }
