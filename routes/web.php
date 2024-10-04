@@ -1,11 +1,16 @@
 <?php
 
+use App\Models\mobile\Billing;
 use App\Models\mobile\WaitingBillingGenerateSim;
 use App\Models\RakutenDataSim;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/hello', function () {
+
+});
 Route::get('/', function () {
-    $waiting = WaitingBillingGenerateSim::where('simcard_type', RakutenDataSim::class)->count();
-    return $waiting;
     return view('welcome');
 });

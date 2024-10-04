@@ -11,6 +11,7 @@ class BillingItem extends Model
 
     protected $connection = "connection2";
 
+    protected $guarded = [];
     protected $casts = [
         'setting_options' => 'array',
     ];

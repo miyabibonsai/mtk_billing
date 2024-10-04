@@ -14,4 +14,12 @@ class Billing extends Model
     protected $casts = [
         'setting_options' => 'array',
     ];
+
+    public function scopeDatasim($query) {
+        $query->where('simcard_type', DataSim::class);
+    }
+
+    public function simmable() {
+        return $this->morphTo(type: 'simcard_type', id: 'simcard_id');
+    }
 }

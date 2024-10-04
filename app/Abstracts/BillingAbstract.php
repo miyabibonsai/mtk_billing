@@ -11,16 +11,22 @@ use Illuminate\Support\Facades\Log;
 
 abstract class BillingAbstract implements BillingInterface
 {
-    protected $model;
+    protected $model, $sim;
     public function __construct($sim, Carbon $date)
     {
+        $this->sim = $sim;
         $this->model = $this->model();
     }
 
     public function createOrGetBillingGroup($user_id,Carbon $billingdate) : BillingGroup {
         $billing_group = null;
         if($user_id != null) {
-            $billing_group = BillingGroup::where('user_id', $user_id)->whereYear('date', $billingdate->format('Y'))->whereMonth('date', $billingdate->format('m'))->first();
+            $billing_group = BillingGroup::whereYear('date', $billingdate->format('Y'))
+                ->whereMonth('date', $billingdate->format('m'))
+                ->whereHas('billings', function($query) {
+                    $query->where('simcard_type', $this->model)->where('simcard_id', $this->sim->id);
+                })
+                ->first();
         }
         if(is_null($billing_group)) {
             $billing_group = new BillingGroup();
@@ -28,6 +34,7 @@ abstract class BillingAbstract implements BillingInterface
             $billing_group->date = $billingdate->format('Y-m-d');
             $billing_group->payment_method_id = 1;
             $billing_group->amount = 0;
+            $billing_group->total = 0;
             $billing_group->publish = 'no';
             $billing_group->save();
         }

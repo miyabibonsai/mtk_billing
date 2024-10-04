@@ -27,7 +27,6 @@ class SimcardBilling extends BillingAbstract
     protected $selectedPlan;
     protected $selectedOption;
     protected Billing $billing;
-    protected Simcard $sim;
     protected $planPrice = 0;
     protected $optionPrice = 0;
     protected $billing_settings;
@@ -35,7 +34,6 @@ class SimcardBilling extends BillingAbstract
     public function __construct($sim, Carbon $date)
     {
         parent::__construct($sim, $date);
-        $this->sim = $sim;
         $this->date = $date;
         $this->pre = (clone $date)->subMonth(1);
         Log::info($this->date);
