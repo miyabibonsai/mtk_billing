@@ -56,7 +56,6 @@ class GenerateBilling extends Command
                     ->join($waiting_table, "$waiting_table.sim_id", '=', "$sim_table.id")
                     ->where("$waiting_table.status", 'waiting')
                     ->where("$waiting_table.simcard_type", $model)
-                    ->where("$waiting_table.id", 178301)
                     ->select("$sim_table.*", "$waiting_table.id as waiting_id","$waiting_table.rewrite as rewrite", "$waiting_table.plan as waiting_plan", "$waiting_table.plan as waiting_callplan", "$waiting_table.previous_callplan as waiting_previous_callplan", "$waiting_table.date as waiting_date" )
                     ->orderBy("$waiting_table.id", 'desc')
                     ->limit(config('billings.records_per_generate'))
