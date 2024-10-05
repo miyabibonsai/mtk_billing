@@ -40,7 +40,8 @@ class SimcardBilling extends BillingAbstract
         $this->premonth = $this->pre->format('m');
         $this->year = $this->pre->format('Y');
         $this->billing_settings =  app(BillingSettings::class);
-        $this->bill_unit_column = $this->billing_settings->bill_unit == 60 ? 'billunit_60' : 'billunit';
+        $this->bill_unit_column =  'billunit_60';
+        // $this->bill_unit_column = $this->billing_settings->bill_unit == 60 ? 'billunit_60' : 'billunit';
     }
     public function model()
     {
