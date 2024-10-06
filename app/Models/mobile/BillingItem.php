@@ -15,4 +15,8 @@ class BillingItem extends Model
     protected $casts = [
         'setting_options' => 'array',
     ];
+
+    public function billing() {
+        return $this->belongsTo(Billing::class);
+    }
 }

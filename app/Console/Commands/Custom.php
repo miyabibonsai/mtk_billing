@@ -4,6 +4,8 @@ namespace App\Console\Commands;
 
 use Carbon\Carbon;
 use App\Models\mobile\Billing;
+use App\Models\mobile\BillingGroup;
+use App\Models\mobile\BillingItem;
 use App\Models\mobile\DataSim;
 use Exception;
 use Illuminate\Console\Command;
@@ -52,6 +54,23 @@ class Custom extends Command
             }
         }
         \App\Models\mobile\WaitingBillingGenerateSim::insert($data);
-        return 0;
+        // return 0;
+        // $g = BillingGroup::whereHas('billings', function($query){
+        //     $query->whereYear('date', "2024")
+        //     ->whereMonth('date', "10")
+        //     ->datasim();
+        // })->count();
+
+        // $i = BillingItem::whereHas('billing', function($query){
+        //     $query->whereYear('date', "2024")
+        //     ->whereMonth('date', "10")
+        //     ->datasim();
+        // })->count();
+        // $b = Billing::whereYear('date', "2024")
+        // ->whereMonth('date', "10")
+        // ->datasim()->count();
+        $this->info( $g );
+        $this->info($i);
+        $this->info($b);
     }
 }

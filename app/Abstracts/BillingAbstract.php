@@ -27,6 +27,11 @@ abstract class BillingAbstract implements BillingInterface
                     $query->where('simcard_type', $this->model)->where('simcard_id', $this->sim->id);
                 })
                 ->first();
+        } else {
+            $billing_group = BillingGroup::where('user_id', $user_id)
+                                            ->whereYear('date', $billingdate->format('Y'))
+                                            ->whereMonth('date', $billingdate->format('m'))
+                                            ->first();
         }
         if(is_null($billing_group)) {
             $billing_group = new BillingGroup();
