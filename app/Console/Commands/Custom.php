@@ -54,9 +54,9 @@ class Custom extends Command
         //     }
         // }
         // \App\Models\mobile\WaitingBillingGenerateSim::insert($data);
-        $datasim = DataSim::where('user_id', 5)->first();
-        $datasim->generateBilling(Carbon::now());
-        $this->info($datasim->id);
+        // $datasim = DataSim::where('user_id', 5)->first();
+        // $datasim->generateBilling(Carbon::now());
+        // $this->info($datasim->id);
         // return 0;
         // $g = BillingGroup::doesntHave('billings')->delete();
         // $this->info($g);
