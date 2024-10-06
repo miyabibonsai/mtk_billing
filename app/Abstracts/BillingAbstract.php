@@ -20,7 +20,7 @@ abstract class BillingAbstract implements BillingInterface
 
     public function createOrGetBillingGroup($user_id,Carbon $billingdate) : BillingGroup {
         $billing_group = null;
-        if($user_id != null) {
+        if(is_null($user_id)) {
             $billing_group = BillingGroup::whereYear('date', $billingdate->format('Y'))
                 ->whereMonth('date', $billingdate->format('m'))
                 ->whereHas('billings', function($query) {
