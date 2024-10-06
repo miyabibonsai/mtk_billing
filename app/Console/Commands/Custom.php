@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Carbon\Carbon;
 use App\Models\mobile\Billing;
+use App\Models\mobile\DataSim;
 use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
@@ -30,26 +31,27 @@ class Custom extends Command
      */
     public function handle()
     {
-        $billings = Billing::datasim()
-                ->where('amount', 0)
-                ->where('date', '>', '2024-09-01')
-                ->with('simmable')
-                ->count();
-        $this->info($billings);
-        return 0;
-        $date = new Carbon();
-        foreach($billings as $billing) {
-            Log::info($billing);
-            try{
-                DB::beginTransaction();
-                $sim = $billing->simmable;
-                $sim->generateBilling(clone $date);
-            } catch (Exception $e) {
-                DB::rollBack();
-                throw $e;
-                break;
-            }
-            DB::commit();
+        $simcards = DataSim::generateable()->select( 'id','status', 'tel_no', 'plan_name', 'user_id', 'merchant_id', 'user_type', 'plan_id')->get();
+        $this->info("Simcards count ====> ". $simcards->count());
+
+        $class_name = DataSim::class;
+        $date = Carbon::now()->format('Y-m-d');
+
+        $data = [];
+        foreach($simcards->chunk(500) as $chunk) {
+            foreach($chunk as $simcard) {
+                array_push($data, [
+                    'sim_id' => $simcard->id,
+                    'date' => $date,
+                    'mc_id' => $simcard->merchant_id ?? 0,
+                    'sim_status'=> $simcard->status,
+                    'number'=> $simcard->tel_no,
+                    // 'plan'=> $simcard->plan_id,
+                    'simcard_type' => $class_name
+                ]);
             }
         }
+        \App\Models\mobile\WaitingBillingGenerateSim::insert($data);
+        return 0;
+    }
 }

@@ -24,4 +24,8 @@ class DataSim extends Model
         $billing = new DataSimBilling($this, $date);
         $billing->generateBilling();
     }
+
+    public function scopeGenerateable($query) {
+        $query->where('status', 'active');
+    }
 }

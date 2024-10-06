@@ -36,6 +36,7 @@ class AddWaiting extends Command
             ->where('merchant', 20)
             ->whereNotNull('plan')
             ->get();
+        $this->info(count($sims));
         $data = array();
         for ($i = 0; $i < count($sims); $i++) {
             array_push($data, [
@@ -48,18 +49,19 @@ class AddWaiting extends Command
                 'callplan' => $sims[$i]['callplan'],
                 'previous_plan' => $sims[$i]['previous_plan'],
                 'previous_callplan' => $sims[$i]['previous_callplan'],
-
+                'rewrite' => 'yes'
             ]);
         }
         \App\Models\mobile\WaitingBillingGenerateSim::insert($data);
 
 
-        // All simcards
+        // // All simcards
         $sims = Simcard::whereDate('activation_date', '>=', '2022-09-01')
             ->whereDate('activation_date', '<=', Carbon::now()->format('Y-m-d'))->orderBy('id', 'asc')->where('status', 'active')
             ->where('merchant', '<>', 20)
             ->whereNotNull('plan')
             ->get();
+        $this->info(count($sims));
         $data = array();
         for ($i = 0; $i < count($sims); $i++) {
             array_push($data, [
@@ -72,17 +74,17 @@ class AddWaiting extends Command
                 'callplan' => $sims[$i]['callplan'],
                 'previous_plan' => $sims[$i]['previous_plan'],
                 'previous_callplan' => $sims[$i]['previous_callplan'],
+                'rewrite' => 'yes'
             ]);
         }
+        \App\Models\mobile\WaitingBillingGenerateSim::insert($data);
 
-
-        // Merchant 2
+        // // Merchant 2
         $sims = Simcard::where('deactivation_date', '!=', null)->whereDate('deactivation_date', '>=', $lastmonth->startOfMonth())->whereDate('deactivation_date', '<=', $lastmonth->endOfMonth())->orderBy('id', 'asc')->where('status', 'deactivate')
             ->whereIn('merchant', array(2))
             ->whereNotNull('plan')
             ->get();
-
-
+        $this->info(count($sims));
         $data = array();
         for ($i = 0; $i < count($sims); $i++) {
             array_push($data, [
@@ -95,6 +97,7 @@ class AddWaiting extends Command
                 'callplan' => $sims[$i]['callplan'],
                 'previous_plan' => $sims[$i]['previous_plan'],
                 'previous_callplan' => $sims[$i]['previous_callplan'],
+                'rewrite' => 'yes'
             ]);
         }
         \App\Models\mobile\WaitingBillingGenerateSim::insert($data);
