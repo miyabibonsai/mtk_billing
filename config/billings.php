@@ -1,7 +1,7 @@
 <?php
 
 return [
-    "records_per_generate" => 80,
+    "records_per_generate" => 400,
     "types" => [
         "simcard" => \App\Models\mobile\Simcard::class,
         "datasim" => \App\Models\mobile\DataSim::class,

@@ -26,6 +26,6 @@ class DataSim extends Model
     }
 
     public function scopeGenerateable($query) {
-        $query->where('status', 'active');
+        $query->whereIn('status', ['active', 'instock', 'stop']);
     }
 }
