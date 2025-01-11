@@ -75,7 +75,8 @@ class GenerateBilling extends Command
             ];
             $i++;
 
-            $model_instance->forceFill((array)$sim + $arr);
+
+            $model_instance->forceFill($arr + (array)$sim);
 
             // // Checking Output
             $this->info("Simcard ID for $model_instance->id");

@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/hello', function () {
-
+    $arr = ["name" => "Jhon Doe", "age" => 12] + ["name" => "Marry Jame"];
+    return $arr;
 });
 Route::get('/', function () {
     return view('welcome');
