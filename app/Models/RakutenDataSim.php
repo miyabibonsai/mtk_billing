@@ -23,6 +23,6 @@ class RakutenDataSim extends Model
 
     public function generateBilling(Carbon $date) {
         $billing = new RakutenDataSimBilling($this, $date);
-        $billing->generateBilling();
+        return $billing->generateBilling();
     }
 }

@@ -27,7 +27,7 @@ class Simcard extends Model
 
     public function generateBilling(Carbon $date) {
         $billing = new SimcardBilling($this, $date);
-        $billing->generateBilling();
+        return $billing->generateBilling();
     }
 
     public function isDiscountPeriod(Carbon $date = null) : bool {

@@ -83,8 +83,19 @@ class GenerateBilling extends Command
             $this->info("Plan ID for {$model_instance->$plan_column}");
 
             $date = new Carbon($model_instance->waiting_date);
-            $model_instance->$method($date);
-            WaitingBillingGenerateSim::where('id', $sim->waiting_id)->update(['status' => 'done']);
+            $billing = $model_instance->$method($date);
+            $waiting = WaitingBillingGenerateSim::find($sim->waiting_id);
+            if($waiting) {
+                $waiting->update([
+                    'status' => 'done',
+                ]);
+                if($waiting->request_id) {
+                    DB::table('requests')->where('id', $waiting->request_id)->update([
+                        "billing_id" => $billing->id
+                    ]);
+                }
+            }
+
         }
         $this->info($i);
 

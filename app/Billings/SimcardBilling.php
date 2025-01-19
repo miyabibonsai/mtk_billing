@@ -50,7 +50,7 @@ class SimcardBilling extends BillingAbstract
 
     public function generateBilling()
     {
-        $this->generateBillingPrototype(
+        $response = $this->generateBillingPrototype(
             sim: $this->sim,
             date: $this->date,
 
@@ -76,6 +76,7 @@ class SimcardBilling extends BillingAbstract
 
             }
         );
+        return $response['billing'];
     }
 
     public function generateBillingItems()

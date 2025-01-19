@@ -26,7 +26,7 @@ class DataSimBilling extends BillingAbstract
 
     public function generateBilling()
     {
-        $this->generateBillingPrototype(
+        $response = $this->generateBillingPrototype(
             sim: $this->sim,
             date: $this->date,
             afterCreatingBilling : function( Billing $billing) {
@@ -44,6 +44,7 @@ class DataSimBilling extends BillingAbstract
                 }
             }
         );
+        return $response['billing'];
     }
 
     public function calculateBillingAmount($sim): float

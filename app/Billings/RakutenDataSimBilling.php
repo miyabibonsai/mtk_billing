@@ -28,7 +28,8 @@ class RakutenDataSimBilling extends BillingAbstract
     public function generateBilling()
     {
         Log::info($this->model);
-        $this->generateBillingPrototype($this->sim, $this->date);
+        $response = $this->generateBillingPrototype($this->sim, $this->date);
+        return $response['billing'];
     }
 
     public function calculateBillingAmount($sim): float

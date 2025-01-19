@@ -20,12 +20,16 @@ class DataSim extends Model
         $this->table = DB::connection($this->connection)->getDatabaseName() . '.data_sims';
     }
 
+    public function billings() {
+        return $this->morphMany(Billing::class, null, 'simcard_type', 'simcard_id');
+    }
+
     public function generateBilling(Carbon $date) {
         $billing = new DataSimBilling($this, $date);
-        $billing->generateBilling();
+        return $billing->generateBilling();
     }
 
     public function scopeGenerateable($query) {
-        $query->whereIn('status', ['active', 'instock', 'stop']);
+        $query->whereIn('status', ['active', 'instock']);
     }
 }
