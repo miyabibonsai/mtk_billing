@@ -9,6 +9,7 @@ use App\Traits\Billable;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class GenerateBilling extends Command
 {
@@ -55,9 +56,10 @@ class GenerateBilling extends Command
         $records = DB::table($sim_table)
                     ->join($waiting_table, "$waiting_table.sim_id", '=', "$sim_table.id")
                     ->where("$waiting_table.status", 'waiting')
+                    ->where("$waiting_table.id", 210120)
                     ->where("$waiting_table.simcard_type", $model)
                     ->whereNot("$waiting_table.plan", 0)
-                    ->select("$sim_table.*", "$waiting_table.id as waiting_id","$waiting_table.rewrite as rewrite", "$waiting_table.plan as waiting_plan", "$waiting_table.plan as waiting_callplan", "$waiting_table.previous_callplan as waiting_previous_callplan", "$waiting_table.date as waiting_date" )
+                    ->select("$sim_table.*", "$waiting_table.id as waiting_id","$waiting_table.rewrite as rewrite", "$waiting_table.plan as waiting_plan", "$waiting_table.callplan as waiting_callplan", "$waiting_table.previous_callplan as waiting_previous_callplan", "$waiting_table.date as waiting_date" )
                     ->orderBy("$waiting_table.id", 'desc')
                     ->limit(config('billings.records_per_generate'))
                     ->get();
@@ -66,6 +68,7 @@ class GenerateBilling extends Command
         $i = 0;
         foreach($records as $sim) {
             $model_instance = new $model();
+            Log::info($model_instance);
             // Array merge
             $arr = [
                 $plan_column => $sim->waiting_plan ?? $sim->$plan_column,
@@ -90,7 +93,7 @@ class GenerateBilling extends Command
                     'status' => 'done',
                 ]);
                 if($waiting->request_id) {
-                    DB::table('requests')->where('id', $waiting->request_id)->update([
+                    DB::connection('connection2')->table('requests')->where('id', $waiting->request_id)->update([
                         "billing_id" => $billing->id
                     ]);
                 }

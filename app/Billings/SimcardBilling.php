@@ -135,6 +135,8 @@ class SimcardBilling extends BillingAbstract
         Log::info("Generating Biling For Options");
 
         $selectedOption = MobileOption::where('call_value', $this->sim->callplan)->where('mobile_plan_id',$this->selectedPlan->id)->first();
+        Log::info($this->sim->callplan);
+        Log::info($this->selectedPlan);
         $this->setOption($selectedOption);
         $this->setOptionPrice();
         if ($this->optionExists()) {

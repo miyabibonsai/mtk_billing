@@ -11,6 +11,7 @@ class WaitingBillingGenerateSim extends Model
     use HasFactory;
 
     protected $connection = "connection2";
+    protected $guarded = [];
 
     public function __construct()
     {
