@@ -118,6 +118,8 @@ class SimcardBilling extends BillingAbstract
 
     public function generateBillForPlan(){
         Log::info("Generating Biling For Plan");
+        Log::info("Plan {$this->sim->plan}");
+        Log::info("Merchant {$this->sim->mc}");
         $selectedPlan = MobilePlan::where('gb',$this->sim->plan)->where('mc',$this->sim->mc)->first();
         $this->setPlan($selectedPlan);
         if($this->planExists()) {
