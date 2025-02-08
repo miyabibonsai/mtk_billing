@@ -30,6 +30,6 @@ class DataSim extends Model
     }
 
     public function scopeGenerateable($query) {
-        $query->whereIn('status', ['active', 'instock']);
+        $query->whereIn('ooak_status', ['using', 'instock'])->where('status', 'active');
     }
 }
