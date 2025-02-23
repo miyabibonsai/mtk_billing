@@ -7,6 +7,7 @@ use App\Models\mobile\Billing;
 use App\Models\mobile\BillingGroup;
 use App\Models\mobile\BillingItem;
 use App\Models\mobile\DataSim;
+use App\Models\mobile\Simcard;
 use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
@@ -33,13 +34,17 @@ class Custom extends Command
      */
     public function handle()
     {
-        $counts = DataSim::whereHas('billings', function($query) {
-            // $this->info(Carbon::now()->month());
-            // $this->info(Carbon::now()->year());
-            $query->whereMonth('date', "01")->whereYear('date', "2025");
-        })->count();
-        $mustCounts = DataSim::generateable()->count();
-        $this->info($counts);
-        $this->info($mustCounts);
+        // $sim = Simcard::find(8793);
+        // $this->info($sim);
+        // $sim->generateBilling(Carbon::now());
+        // generateBilling
+        // $counts = DataSim::whereHas('billings', function($query) {
+        //     // $this->info(Carbon::now()->month());
+        //     // $this->info(Carbon::now()->year());
+        //     $query->whereMonth('date', "01")->whereYear('date', "2025");
+        // })->count();
+        // $mustCounts = DataSim::generateable()->count();
+        // $this->info($counts);
+        // $this->info($mustCounts);
     }
 }

@@ -37,7 +37,7 @@ class SimcardBilling extends BillingAbstract
         $this->date = $date;
         $this->pre = (clone $date)->subMonth(1);
         Log::info($this->date);
-        $this->premonth = $this->pre->format('m');
+        $this->premonth = $this->pre;
         $this->year = $this->pre->format('Y');
         $this->billing_settings =  app(BillingSettings::class);
         $this->bill_unit_column =  'billunit_60';
@@ -95,9 +95,9 @@ class SimcardBilling extends BillingAbstract
         }
     }
 
-    public function generateCallLogWithOption($month)
+    public function generateCallLogWithOption(Carbon $month)
     {
-        $call_unit = CallLog::whereYear('date', '=', $this->year)->whereMonth('date', '=', $month)->whereNotIn('type', array('sms', 'forein sms', 'forein call','promo foreign call'))->where('simcard_id', $this->sim->id)->sum($this->bill_unit_column);
+        $call_unit = CallLog::whereYear('date', '=', $this->year)->whereMonth('date', '=', $month->format('m'))->whereNotIn('type', array('sms', 'forein sms', 'forein call','promo foreign call'))->where('simcard_id', $this->sim->id)->sum($this->bill_unit_column);
         return $call_unit;
     }
 
@@ -153,8 +153,8 @@ class SimcardBilling extends BillingAbstract
         }
 
         /** Generate Last Month Option Billing for Loyo card */
-        $activate_month = Carbon::parse($this->sim->activation_date)->format('m');
-        if($this->sim->user_type == 'loyo' && $this->premonth == $activate_month)
+        $activate_month = $this->sim->activation_date;
+        if($this->sim->user_type == 'loyo' && $this->premonth->isSameMonth($activate_month))
         {
             $lastMontOption = MobileOption::where('call_value', $this->sim->previous_callplan)->where('mobile_plan_id',$this->selectedPlan->id)->first();
             if($lastMontOption != null)
@@ -196,21 +196,21 @@ class SimcardBilling extends BillingAbstract
     public function generateBillForCallLogs() {
         Log::info("Generating Biling For Cal Logs");
         //find sms
-        $sms = CallLog::whereYear('date', '=', $this->year)->whereMonth('date', '=', $this->premonth)->where('type', 'sms')->where('simcard_id', $this->sim->id)->count();
+        $sms = CallLog::whereYear('date', '=', $this->year)->whereMonth('date', '=', $this->premonth->format('m'))->where('type', 'sms')->where('simcard_id', $this->sim->id)->count();
         if ($sms > 0) {
             $this->pushBillingItem('SMS', 'SMS Description', $sms * $this->billing_settings->sms_unit, ['sms_unit' => $this->billing_settings->sms_unit]);
         }
 
-        $sms = CallLog::whereYear('date', '=', $this->year)->whereMonth('date', $this->premonth)->where('type', 'forein sms')->where('simcard_id', $this->sim->id)->sum('duration');
+        $sms = CallLog::whereYear('date', '=', $this->year)->whereMonth('date', $this->premonth->format('m'))->where('type', 'forein sms')->where('simcard_id', $this->sim->id)->sum('duration');
         if ($sms > 0) {
             $this->pushBillingItem('国際SMS', '国際SMS Description', $sms * $this->billing_settings->foreign_sms_unit, ['foreign_sms_unit' => $this->billing_settings->foreign_sms_unit]);
         }
-        $foreign_call = CallLog::whereYear('date', '=', $this->year)->whereMonth('date', $this->premonth)->where('type', 'forein call')->where('simcard_id', $this->sim->id)->sum($this->bill_unit_column);
+        $foreign_call = CallLog::whereYear('date', '=', $this->year)->whereMonth('date', $this->premonth->format('m'))->where('type', 'forein call')->where('simcard_id', $this->sim->id)->sum($this->bill_unit_column);
         if ($foreign_call > 0) {
             $this->pushBillingItem('Foreign Call', 'Foreign Call Description', $foreign_call * $this->billing_settings->foreign_call_unit, ['foreign_call_unit' => $this->billing_settings->foreign_call_unit]);
         }
 
-        $proforeign_call = CallLog::whereYear('date', '=', $this->year)->whereMonth('date', $this->premonth)->where('type', 'promo foreign call')->where('simcard_id', $this->sim->id)->get();
+        $proforeign_call = CallLog::whereYear('date', '=', $this->year)->whereMonth('date', $this->premonth->format('m'))->where('type', 'promo foreign call')->where('simcard_id', $this->sim->id)->get();
         if ($proforeign_call !== null) {
             $cost = 0;
             $cost_reason = '';
