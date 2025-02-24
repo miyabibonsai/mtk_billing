@@ -34,9 +34,14 @@ class Custom extends Command
      */
     public function handle()
     {
-        // $sim = Simcard::find(8793);
-        // $this->info($sim);
-        // $sim->generateBilling(Carbon::now());
+        $sim = Simcard::find(8801);
+        $this->info($sim);
+        $sim->generateBilling(Carbon::now());
+        // $sims = Simcard::where('user_type', 'loyo')->whereMonth('activation_date', '01')->whereYear('activation_date', '<>', 2025)->select('id', 'tel_no')->get();
+        // foreach($sims as $sim) {
+        //     $this->info($sim->tel_no);
+        //     $this->info($sim->id);
+        // }
         // generateBilling
         // $counts = DataSim::whereHas('billings', function($query) {
         //     // $this->info(Carbon::now()->month());

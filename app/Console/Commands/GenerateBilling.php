@@ -3,7 +3,9 @@
 namespace App\Console\Commands;
 
 use App\Models\mobile\DataSim;
+use App\Models\mobile\RequestModel;
 use App\Models\mobile\WaitingBillingGenerateSim;
+use App\Models\RakutenPurchaseLog;
 use Exception;
 use App\Traits\Billable;
 use Carbon\Carbon;
@@ -91,9 +93,22 @@ class GenerateBilling extends Command
                     'status' => 'done',
                 ]);
                 if($waiting->request_id) {
-                    DB::connection('connection2')->table('requests')->where('id', $waiting->request_id)->update([
-                        "billing_id" => $billing->id
-                    ]);
+                    if($waiting->request_type === RakutenPurchaseLog::class) {
+                        $log = RakutenPurchaseLog::find($waiting->request_id);
+                        if($log) {
+                            $log->billling_id = $billing->id;
+                            $log->save();
+
+                            if(in_array($log->status, ['paid', 'activeWait', 'active'])) {
+                                $billing->status = 'paid';
+                                $billing->save();
+                            }
+                        }
+                    } else {
+                        DB::connection('connection2')->table('requests')->where('id', $waiting->request_id)->update([
+                            "billing_id" => $billing->id
+                        ]);
+                    }
                 }
             }
 
