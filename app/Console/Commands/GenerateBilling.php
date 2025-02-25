@@ -114,6 +114,6 @@ class GenerateBilling extends Command
 
         }
         $this->info($i);
-
+        return 0;
     }
 }
