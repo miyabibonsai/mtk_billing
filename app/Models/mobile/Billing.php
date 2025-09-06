@@ -22,4 +22,8 @@ class Billing extends Model
     public function simmable() {
         return $this->morphTo(type: 'simcard_type', id: 'simcard_id');
     }
+
+    public function items() {
+        return $this->hasMany(BillingItem::class, 'billing_id', 'id');
+    }
 }

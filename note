@@ -1,0 +1,11 @@
+Sim B
+call_file -> call_logs_type_b
+type -> call(dome), sms(SMS), foreign sms(TO Int SMS)
+
+Rakuten Call
+cost_30 -> cost_60
+
+
+Rakuten Call
+- No Operator api yet
+- User Assign, remove , ooak status update, view cal logs
