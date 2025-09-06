@@ -112,7 +112,7 @@ class GenerateBilling extends Command
                         }
                     }
                 }
-            } catch (Exception $e){
+            } catch (Error $e){
                 DB::rollBack();
                 $waiting->error = $e->getMessage();
                 $waiting->status = 'error';
