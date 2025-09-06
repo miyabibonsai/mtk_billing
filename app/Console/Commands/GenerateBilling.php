@@ -53,13 +53,13 @@ class GenerateBilling extends Command
         $sim_table = $instance->getTable();
         $waiting_table = (new WaitingBillingGenerateSim())->getTable();
         $plan_column = $instance->getPlanColumn();
-
+        $this->info($model);
         /**Get Records from Simcards and Waiting Sims */
         $records = DB::table($sim_table)
                     ->join($waiting_table, "$waiting_table.sim_id", '=', "$sim_table.id")
                     ->where("$waiting_table.status", 'waiting')
                     ->where("$waiting_table.simcard_type", $model)
-                    ->whereNot("$waiting_table.plan", 0)
+                    // ->whereNot("$waiting_table.plan", 0)
                     ->select("$sim_table.*", "$waiting_table.id as waiting_id","$waiting_table.rewrite as rewrite", "$waiting_table.plan as waiting_plan", "$waiting_table.callplan as waiting_callplan", "$waiting_table.previous_callplan as waiting_previous_callplan", "$waiting_table.date as waiting_date" )
                     ->orderBy("$waiting_table.id", 'desc')
                     ->limit(config('billings.records_per_generate'))
@@ -78,41 +78,49 @@ class GenerateBilling extends Command
             ];
             $i++;
 
-
             $model_instance->forceFill($arr + (array)$sim);
 
-            // // Checking Output
+            // Checking Output
             $this->info("Simcard ID for $model_instance->id");
             $this->info("Plan ID for {$model_instance->$plan_column}");
-
             $date = new Carbon($model_instance->waiting_date);
-            $billing = $model_instance->$method($date);
             $waiting = WaitingBillingGenerateSim::find($sim->waiting_id);
-            if($waiting) {
-                $waiting->update([
-                    'status' => 'done',
-                ]);
-                if($waiting->request_id) {
-                    if($waiting->request_type === RakutenPurchaseLog::class) {
-                        $log = RakutenPurchaseLog::find($waiting->request_id);
-                        if($log) {
-                            $log->billling_id = $billing->id;
-                            $log->save();
+            try{
+                DB::beginTransaction();
+                $billing = $model_instance->$method($date);
 
-                            if(in_array($log->status, ['paid', 'activeWait', 'active'])) {
-                                $billing->status = 'paid';
-                                $billing->save();
+                if($waiting) {
+                    $waiting->update([
+                        'status' => 'done',
+                    ]);
+                    if($waiting->request_id) {
+                        if($waiting->request_type === RakutenPurchaseLog::class) {
+                            $log = RakutenPurchaseLog::find($waiting->request_id);
+                            if($log) {
+                                $log->billling_id = $billing->id;
+                                $log->save();
+
+                                if(in_array($log->status, ['paid', 'activeWait', 'active'])) {
+                                    $billing->status = 'paid';
+                                    $billing->save();
+                                }
                             }
+                        } else {
+                            DB::connection('connection2')->table('requests')->where('id', $waiting->request_id)->update([
+                                "billing_id" => $billing->id
+                            ]);
                         }
-                    } else {
-                        DB::connection('connection2')->table('requests')->where('id', $waiting->request_id)->update([
-                            "billing_id" => $billing->id
-                        ]);
                     }
                 }
+            } catch (Exception $e){
+                DB::rollBack();
+                $waiting->error = $e->getMessage();
+                $waiting->status = 'error';
+                $waiting->save();
             }
-
+            DB::commit();
         }
+
         $this->info($i);
         return 0;
     }
