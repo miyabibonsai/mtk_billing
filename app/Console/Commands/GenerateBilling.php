@@ -21,7 +21,7 @@ class GenerateBilling extends Command
      *
      * @var string
      */
-    protected $signature = 'generate-billing {type}';
+    protected $signature = 'generate-billing {type} {count}';
 
     /**
      * The console command description.
@@ -63,7 +63,7 @@ class GenerateBilling extends Command
                     // ->whereNot("$waiting_table.plan", 0)
                     ->select("$sim_table.*", "$waiting_table.id as waiting_id","$waiting_table.rewrite as rewrite", "$waiting_table.plan as waiting_plan", "$waiting_table.callplan as waiting_callplan", "$waiting_table.previous_callplan as waiting_previous_callplan", "$waiting_table.date as waiting_date" )
                     ->orderBy("$waiting_table.id", 'desc')
-                    ->limit(config('billings.records_per_generate'))
+                    ->limit($this->argument('count') ? $this->argument('count') : config('billings.records_per_generate'))
                     ->get();
 
         $this->info(count($records));
