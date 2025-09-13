@@ -146,7 +146,7 @@ class SimcardBilling extends BillingAbstract
             $call_unit = $this->generateCallLogWithOption( $this->premonth);
             //get call logs
             if ($call_unit > 0) {
-                $this->pushBillingItem('Call', 'Call', $call_unit * 22);
+                $this->pushBillingItem('Call', 'Call', $call_unit * 22, ["call_unit" => 22]);
             }
 
             $this->pushBillingItem($this->selectedOption->option_name, $this->selectedOption->option_name, $this->selectedOption->price);

@@ -30,7 +30,7 @@ class Simcard extends Model
         return $billing->generateBilling();
     }
 
-    public function isDiscountPeriod(Carbon $date = null) : bool {
+    public function isDiscountPeriod(?Carbon $date) : bool {
         if($this->isNotLoyo()) return false;
 
         if(is_null($date)) $date = Carbon::now();

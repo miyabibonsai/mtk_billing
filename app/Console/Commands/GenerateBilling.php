@@ -21,7 +21,7 @@ class GenerateBilling extends Command
      *
      * @var string
      */
-    protected $signature = 'generate-billing {type} {count}';
+    protected $signature = 'generate-billing {type} {count?}';
 
     /**
      * The console command description.
