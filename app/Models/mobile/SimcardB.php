@@ -18,11 +18,11 @@ class SimcardB extends Model
     protected $plan_column = 'plan';
 
 
-    protected $table = 'simcard_type_b';
+    protected $table = 'simcard_b';
 
     public function __construct()
     {
-        $this->table = DB::connection($this->connection)->getDatabaseName() . '.simcard_type_b';
+        $this->table = DB::connection($this->connection)->getDatabaseName() . '.simcard_b';
     }
 
     // Define fillable properties if you use mass assignment (create, update)

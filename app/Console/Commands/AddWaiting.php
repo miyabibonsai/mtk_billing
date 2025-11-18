@@ -58,7 +58,7 @@ class AddWaiting extends Command
         // \App\Models\mobile\WaitingBillingGenerateSim::insert($data);
 
 
-        // // All simcards
+        // // // All simcards
         // $sims = Simcard::whereDate('activation_date', '>=', '2022-09-01')
         //     ->whereDate('activation_date', '<=', Carbon::now()->format('Y-m-d'))->orderBy('id', 'asc')->where('status', 'active')
         //     ->where('merchant', '<>', 20)
@@ -82,7 +82,7 @@ class AddWaiting extends Command
         // }
         // \App\Models\mobile\WaitingBillingGenerateSim::insert($data);
 
-        // // // // Merchant 2
+        // // Merchant 2
         // $sims = Simcard::where('deactivation_date', '!=', null)->whereDate('deactivation_date', '>=', $lastmonth->startOfMonth())->whereDate('deactivation_date', '<=', $lastmonth->endOfMonth())->orderBy('id', 'asc')->where('status', 'deactivate')
         //     ->whereIn('merchant', array(2))
         //     ->whereNotNull('plan')
@@ -106,7 +106,7 @@ class AddWaiting extends Command
         // \App\Models\mobile\WaitingBillingGenerateSim::insert($data);
 
         // $simcards = DataSim::generateable()->select( 'id','status', 'tel_no', 'plan_name', 'user_id', 'merchant_id', 'user_type', 'plan_id')->get();
-        // $this->info("Simcards count ====> ". $simcards->count());
+        // $this->info("Datasim count ====> ". $simcards->count());
 
         // $class_name = DataSim::class;
         // $date = Carbon::now()->format('Y-m-d');
@@ -129,10 +129,10 @@ class AddWaiting extends Command
         // \App\Models\mobile\WaitingBillingGenerateSim::insert($data);
         // return 0;
 
-        $simcards = RakutenCallSim::where('status', 'active')->get();
+        $simcards = SimcardB::where('status', 'active')->get();
         $this->info("Simcards count ====> ". $simcards->count());
 
-        $class_name = RakutenCallSim::class;
+        $class_name = SimcardB::class;
         $date = Carbon::now()->format('Y-m-d');
 
         $data = [];

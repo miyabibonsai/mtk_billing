@@ -9,4 +9,5 @@ class TypeBCallLog extends Model
 {
     use HasFactory;
     protected $connection = 'connection2';
+    protected $table = 'simcard_b_call_logs';
 }
