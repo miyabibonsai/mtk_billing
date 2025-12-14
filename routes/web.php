@@ -1,11 +1,13 @@
 <?php
 
+use App\Http\Controllers\WaitingBillingController;
 use App\Models\mobile\Billing;
 use App\Models\mobile\SimcardB;
 use App\Models\mobile\WaitingBillingGenerateSim;
 use App\Models\RakutenCallSim;
 use App\Models\RakutenDataSim;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
@@ -19,3 +21,10 @@ Route::get('/hello', function () {
 Route::get('/', function () {
     return view('welcome');
 });
+
+Auth::routes();
+
+Route::middleware('auth')->group(function () {
+    Route::get('admin/waiting-billings', [WaitingBillingController::class, 'index']);
+});
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

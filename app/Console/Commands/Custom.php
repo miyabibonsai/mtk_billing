@@ -38,13 +38,19 @@ class Custom extends Command
      */
     public function handle()
     {
-        $this->info(Billing::where('simcard_type', SimcardB::class)->where('date', '2025-11-17')->count());
-        $this->info(BillingGroup::whereHas('billings', function($query) {
-            $query->where('simcard_type', SimcardB::class)->where('date', '2025-11-17');
-        })->has('billings', 1)->delete());
-        $this->info(BillingItem::whereHas('billing', function($query) {
-            $query->where('simcard_type', SimcardB::class)->where('date', '2025-11-17');
-        })->delete());
-        $this->info(Billing::where('simcard_type', SimcardB::class)->where('date', '2025-11-17')->delete());
+        // $this->info(Billing::whereMonth('date','12')->whereYear('date','2025')->whereHasMorph('simmable', [Simcard::class], function($sim) {
+        //     $sim->whereMonth('activation_date', '12')->whereYear('activation_date', '2025');
+        // })->get());
+        SimcardB::whereIn('id', [142,149])->get()->map(function($s) {
+            $s->generateBilling(Carbon::now());
+        });
+        // $this->info(Billing::where('simcard_type', SimcardB::class)->where('date', '2025-11-17')->count());
+        // $this->info(BillingGroup::whereHas('billings', function($query) {
+        //     $query->where('simcard_type', SimcardB::class)->where('date', '2025-11-17');
+        // })->has('billings', 1)->delete());
+        // $this->info(BillingItem::whereHas('billing', function($query) {
+        //     $query->where('simcard_type', SimcardB::class)->where('date', '2025-11-17');
+        // })->delete());
+        // $this->info(Billing::where('simcard_type', SimcardB::class)->where('date', '2025-11-17')->delete());
     }
 }

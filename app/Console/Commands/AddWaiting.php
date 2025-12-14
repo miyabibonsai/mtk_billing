@@ -129,10 +129,10 @@ class AddWaiting extends Command
         // \App\Models\mobile\WaitingBillingGenerateSim::insert($data);
         // return 0;
 
-        $simcards = SimcardB::where('status', 'active')->get();
+        $simcards = DataSim::where('status', 'active')->get();
         $this->info("Simcards count ====> ". $simcards->count());
 
-        $class_name = SimcardB::class;
+        $class_name = DataSim::class;
         $date = Carbon::now()->format('Y-m-d');
 
         $data = [];
