@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BillingController;
 use App\Http\Controllers\WaitingBillingController;
 use App\Models\mobile\Billing;
 use App\Models\mobile\SimcardB;
@@ -26,5 +27,8 @@ Auth::routes();
 
 Route::middleware('auth')->group(function () {
     Route::get('admin/waiting-billings', [WaitingBillingController::class, 'index']);
+    Route::get('admin/generate-billing', [BillingController::class, 'showGenerateBilling']);
+    Route::post('admin/generate-billing', [BillingController::class, 'generateBilling'])->name('generate-billing');
+
 });
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

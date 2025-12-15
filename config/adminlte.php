@@ -339,6 +339,11 @@ return [
             'icon' => 'fas fa-fw fa-user',
         ],
         [
+            'text' => 'Generate Billings',
+            'url' => 'admin/generate-billing',
+            'icon' => 'fas fa-fw fa-user',
+        ],
+        [
             'text' => 'change_password',
             'url' => 'admin/settings',
             'icon' => 'fas fa-fw fa-lock',

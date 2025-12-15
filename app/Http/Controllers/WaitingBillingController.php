@@ -18,6 +18,7 @@ class WaitingBillingController extends Controller
         return view('waiting-billings.index', [
             'waitings' => $waitings
         ]);
-
     }
+
+
 }
