@@ -10,5 +10,6 @@ Artisan::command('inspire', function () {
 
 Schedule::command('generate-billing datasim')->everyThreeMinutes();
 Schedule::command('generate-billing simcard')->everyTenMinutes();
+Schedule::command('generate-billing simcard_b')->everyTenMinutes();
 Schedule::command('generate-billing rakuten_call')->everyFiveMinutes();
 
