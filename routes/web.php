@@ -29,6 +29,7 @@ Route::middleware('auth')->group(function () {
     Route::get('admin/waiting-billings', [WaitingBillingController::class, 'index']);
     Route::get('admin/generate-billing', [BillingController::class, 'showGenerateBilling']);
     Route::post('admin/generate-billing', [BillingController::class, 'generateBilling'])->name('generate-billing');
+    Route::get('admin/operation', [BillingController::class, 'showOperation'])->name('show-operation');
 
 });
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

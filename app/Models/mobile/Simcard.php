@@ -25,6 +25,10 @@ class Simcard extends Model
         $this->table = DB::connection($this->connection)->getDatabaseName() . '.simcards';
     }
 
+    public function billings() {
+        return $this->morphMany(Billing::class, null, 'simcard_type', 'simcard_id');
+    }
+
     public function generateBilling(Carbon $date) {
         $billing = new SimcardBilling($this, $date);
         return $billing->generateBilling();

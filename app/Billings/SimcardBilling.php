@@ -98,6 +98,7 @@ class SimcardBilling extends BillingAbstract
     public function generateCallLogWithOption(Carbon $month)
     {
         $call_unit = CallLog::whereYear('date', '=', $this->year)->whereMonth('date', '=', $month->format('m'))->whereNotIn('type', array('sms', 'forein sms', 'forein call','promo foreign call'))->where('simcard_id', $this->sim->id)->sum($this->bill_unit_column);
+        Log::info("Call Unit for Option in " . $month->format('Y-m') . " : " . $call_unit);
         return $call_unit;
     }
 

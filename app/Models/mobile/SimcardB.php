@@ -68,5 +68,9 @@ class SimcardB extends Model
         $billing = new SimcardBBilling($this, $date);
         return $billing->generateBilling();
     }
+
+    public function billings() {
+        return $this->morphMany(Billing::class, null, 'simcard_type', 'simcard_id');
+    }
 }
 
