@@ -192,7 +192,8 @@ class AddWaiting extends Command
                 $query->where('status', 'active')->where('activation_date', '<', Carbon::now()->startOfMonth())->orWhere(function($query) {
                 $query->where('status', 'deactivate')->whereMonth('deactivation_date', Carbon::now()->subMonth()->month)->whereYear('deactivation_date', Carbon::now()->subMonth()->year);
             });
-        })->where('type',  'call')->whereNotNull('merchant')->get();
+        })->whereNotIn('plan', ['u99','u10'])->get();
+            $this->info("Simcards count ====> ". $simcards->count());
 
 
             $this->info("Simcards count ====> ". $simcards->count());
