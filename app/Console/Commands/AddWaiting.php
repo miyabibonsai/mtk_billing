@@ -210,14 +210,15 @@ class AddWaiting extends Command
                         'sim_id' => $simcard->id,
                         'date' => $date,
                         'simcard_type' => $class_name,
-                        'mc_id' => $simcard->merchant,
+                        'mc_id' => $simcard->merchant ?? 0,
                         'sim_status' => $simcard->status,
                         'number' => $simcard->tel_no,
                         'plan' => $simcard->plan,
                         'callplan' => $simcard->callplan,
                         'previous_plan' => $simcard->previous_plan,
                         'previous_callplan' => $simcard->previous_callplan,
-                        'rewrite' => 'yes'
+                        'rewrite' => 'yes',
+
                     ]);
                 }
             }
